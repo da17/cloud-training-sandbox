@@ -9,7 +9,7 @@ REPO_ROOT="$(pwd)"
 # Install git-remote-codecommit
 pip3 install --break-system-packages git-remote-codecommit
 
-# Clone CloudGoat if it does not already exist
+# Clone CloudGoat
 mkdir -p "$REPO_ROOT/labs"
 
 if [ ! -d "$REPO_ROOT/labs/cloudgoat" ]; then
@@ -25,21 +25,18 @@ fi
 
 source .venv/bin/activate
 
-# Install CloudGoat from the current package definition
+# Install CloudGoat from pyproject.toml
 pip install --upgrade pip
 pip install .
 
-# Ensure CloudGoat launcher is executable
-chmod +x cloudgoat/cloudgoat.py
-
-# Add terminal shortcuts
+# Add CloudGoat command aliases
 cat <<EOF >> ~/.bashrc
 
 # CloudGoat aliases
-alias cg='source $REPO_ROOT/labs/cloudgoat/.venv/bin/activate && python $REPO_ROOT/labs/cloudgoat/cloudgoat/cloudgoat.py'
-alias cg-list='source $REPO_ROOT/labs/cloudgoat/.venv/bin/activate && python $REPO_ROOT/labs/cloudgoat/cloudgoat/cloudgoat.py list'
-alias cg-create='source $REPO_ROOT/labs/cloudgoat/.venv/bin/activate && python $REPO_ROOT/labs/cloudgoat/cloudgoat/cloudgoat.py create'
-alias cg-destroy='source $REPO_ROOT/labs/cloudgoat/.venv/bin/activate && python $REPO_ROOT/labs/cloudgoat/cloudgoat/cloudgoat.py destroy'
+alias cg='cd $REPO_ROOT/labs/cloudgoat && source .venv/bin/activate && cloudgoat'
+alias cg-list='cd $REPO_ROOT/labs/cloudgoat && source .venv/bin/activate && cloudgoat list'
+alias cg-create='cd $REPO_ROOT/labs/cloudgoat && source .venv/bin/activate && cloudgoat create'
+alias cg-destroy='cd $REPO_ROOT/labs/cloudgoat && source .venv/bin/activate && cloudgoat destroy'
 EOF
 
 echo "==> CloudGoat installation complete."
