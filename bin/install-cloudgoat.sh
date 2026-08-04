@@ -6,10 +6,10 @@ echo "==> Provisioning CloudGoat Deployment Workspace..."
 
 REPO_ROOT="$(pwd)"
 
-# Install git-remote-codecommit (system utility)
+# Install git-remote-codecommit
 pip3 install --break-system-packages git-remote-codecommit
 
-# Clone CloudGoat if it doesn't already exist
+# Clone CloudGoat if it does not already exist
 mkdir -p "$REPO_ROOT/labs"
 
 if [ ! -d "$REPO_ROOT/labs/cloudgoat" ]; then
@@ -18,20 +18,28 @@ fi
 
 cd "$REPO_ROOT/labs/cloudgoat"
 
-# Create and activate a virtual environment
-python3 -m venv .venv
+# Create Python virtual environment
+if [ ! -d ".venv" ]; then
+    python3 -m venv .venv
+fi
+
 source .venv/bin/activate
 
-# Upgrade pip and install CloudGoat
+# Install CloudGoat from the current package definition
 pip install --upgrade pip
 pip install .
 
-chmod +x cloudgoat.py
+# Ensure CloudGoat launcher is executable
+chmod +x cloudgoat/cloudgoat.py
 
-# Add aliases (using the virtual environment's Python)
-echo "alias cg='source $REPO_ROOT/labs/cloudgoat/.venv/bin/activate && python $REPO_ROOT/labs/cloudgoat/cloudgoat.py'" >> ~/.bashrc
-echo "alias cg-list='source $REPO_ROOT/labs/cloudgoat/.venv/bin/activate && python $REPO_ROOT/labs/cloudgoat/cloudgoat.py list'" >> ~/.bashrc
-echo "alias cg-create='source $REPO_ROOT/labs/cloudgoat/.venv/bin/activate && python $REPO_ROOT/labs/cloudgoat/cloudgoat.py create'" >> ~/.bashrc
-echo "alias cg-destroy='source $REPO_ROOT/labs/cloudgoat/.venv/bin/activate && python $REPO_ROOT/labs/cloudgoat/cloudgoat.py destroy'" >> ~/.bashrc
+# Add terminal shortcuts
+cat <<EOF >> ~/.bashrc
+
+# CloudGoat aliases
+alias cg='source $REPO_ROOT/labs/cloudgoat/.venv/bin/activate && python $REPO_ROOT/labs/cloudgoat/cloudgoat/cloudgoat.py'
+alias cg-list='source $REPO_ROOT/labs/cloudgoat/.venv/bin/activate && python $REPO_ROOT/labs/cloudgoat/cloudgoat/cloudgoat.py list'
+alias cg-create='source $REPO_ROOT/labs/cloudgoat/.venv/bin/activate && python $REPO_ROOT/labs/cloudgoat/cloudgoat/cloudgoat.py create'
+alias cg-destroy='source $REPO_ROOT/labs/cloudgoat/.venv/bin/activate && python $REPO_ROOT/labs/cloudgoat/cloudgoat/cloudgoat.py destroy'
+EOF
 
 echo "==> CloudGoat installation complete."
