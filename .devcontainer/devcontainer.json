@@ -1,0 +1,6 @@
+{
+  "name": "Cloud Engineering Sandbox",
+  "image": "://microsoft.com",
+  "containerUser": "root",
+  "postCreateCommand": "chmod +x bin/* && ./bin/install-terraform.sh && ./bin/install-aws-cli.sh && ./bin/install-azure-cli.sh && ./bin/install-cloudgoat.sh"
+}
